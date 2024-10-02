@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        body {
+            background: white;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        #redrawBtn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #title {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.3);
+            pointer-events: none; /* 클릭 방지 */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="drawingCanvas"></canvas>
+    <button id="redrawBtn" onclick="clearCanvas()">Redraw</button>
+    <div id="title">네모네모 그림판</div>
+
+    <script type="text/javascript">
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        const title = document.getElementById('title');
+        let drawing = false;
+
+        // 캔버스 크기 조정
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // 마우스 클릭 시 그리기 시작
+        canvas.addEventListener('mousedown', () => {
+            drawing = true;
+        });
+
+        // 마우스 클릭 해제 시 그리기 중지
+        canvas.addEventListener('mouseup', () => {
+            drawing = false;
+            ctx.beginPath(); // 새로운 경로 시작
+        });
+
+        // 마우스 이동 시 그림 그리기
+        canvas.addEventListener('mousemove', draw);
+
+        // Redraw 버튼을 눌렀을 때 캔버스 초기화
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // 그림 그리는 함수
+        function draw(event) {
+            if (!drawing) return;
+
+            const x = event.clientX;
+            const y = event.clientY;
+            const color = randomColor();
+
+            // 랜덤 색의 작은 사각형 그리기
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, 20, 20);
+        }
+
+        // 랜덤 색상 생성 함수
+        function randomColor() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+    </script>
+</body>
+</html>
